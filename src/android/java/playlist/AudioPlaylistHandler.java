@@ -20,6 +20,7 @@ import com.devbrackets.android.playlistcore.components.mediacontrols.MediaContro
 import com.devbrackets.android.playlistcore.components.mediasession.DefaultMediaSessionProvider;
 import com.devbrackets.android.playlistcore.components.mediasession.MediaSessionProvider;
 import com.devbrackets.android.playlistcore.components.playlisthandler.DefaultPlaylistHandler;
+import com.rolamix.plugins.audioplayer.notification.PlaylistNotificationProvider;
 
 
 public class AudioPlaylistHandler<I extends PlaylistItem, M extends BasePlaylistManager<I>>
@@ -49,7 +50,9 @@ public class AudioPlaylistHandler<I extends PlaylistItem, M extends BasePlaylist
 
     @Override
     public void onPrepared(MediaPlayerApi<I> mediaPlayer) {
+
         super.onPrepared(mediaPlayer);
+
     }
 
     @Override

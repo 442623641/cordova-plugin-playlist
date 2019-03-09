@@ -1,30 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"
-	id="cordova-plugin-playlist"
-	version="0.8.0">
-	<name>AudioPlayer</name>
-	<keywords>cordova,music,controller,controls,media,plugin,notification,lockscreen,now,playing,playlist</keywords>
-	<repo>https://github.com/Rolamix/cordova-plugin-playlist</repo>
-	<description>Native support for audio playlists, background support, and lock screen controls</description>
-	<license>MIT</license>
-	<author>Rolamix</author>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" 
+  xmlns:android="http://schemas.android.com/apk/res/android" id="cordova-plugin-playlist" version="1.0.0">
+  <name>AudioPlayer</name>
+  <keywords>cordova,music,controller,controls,media,plugin,notification,lockscreen,now,playing,playlist</keywords>
+  <repo>https://github.com/442623641/cordova-plugin-playlist</repo>
+  <description>Native support for audio playlists, background support, and lock screen controls</description>
+  <license>MIT</license>
+  <author>Rolamix</author>
 
-	<engines>
+  <engines>
     <engine name="cordova" version=">=7.1.0"/>
     <engine name="cordova-android" version=">=7.1.0"/>
     <engine name="cordova-ios" version=">=4.5.0"/>
-	</engines>
+  </engines>
 
-	<js-module src="www/RmxAudioPlayer.js" name="AudioPlayer">
-		<clobbers target="window.plugins.AudioPlayer" />
-	</js-module>
+  <js-module src="www/RmxAudioPlayer.js" name="AudioPlayer">
+    <clobbers target="window.plugins.AudioPlayer" />
+  </js-module>
 
   <js-module src="www/Constants.js" name="Constants">
-		<runs />
-	</js-module>
+    <runs />
+  </js-module>
 
-	<!-- android -->
-	<platform name="android">
+  <!-- android -->
+  <platform name="android">
     <hook type="after_prepare" src="scripts/android_after_plugin_install.js" />
     <hook type="after_plugin_install" src="scripts/android_after_plugin_install.js"/>
     <hook type="before_plugin_uninstall" src="scripts/android_before_plugin_uninstall.js" />
@@ -34,17 +33,17 @@
         If your app cannot use this, do not install this plugin.
     </info>
 
-		<config-file target="res/xml/config.xml" parent="/*">
-			<feature name="RmxAudioPlayer" >
-				<param name="android-package" value="com.rolamix.plugins.audioplayer.AudioPlayerPlugin"/>
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="RmxAudioPlayer">
+        <param name="android-package" value="com.rolamix.plugins.audioplayer.AudioPlayerPlugin"/>
         <param name="onload" value="true" />
-			</feature>
-		</config-file>
+      </feature>
+    </config-file>
 
     <config-file target="AndroidManifest.xml" parent="/manifest">
       <uses-permission android:name="android.permission.INTERNET"/>
       <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-      <!-- <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> -->
+      <uses-permission android:name="android.permission.WAKE_LOCK" />
     </config-file>
 
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
@@ -59,7 +58,7 @@
          the plugin install/uninstall scripts manages this.
     -->
 
-    <dependency id="cordova-support-google-services" version="~1.2.0"/>
+    <!-- <dependency id="cordova-support-google-services" version="~1.2.0"/> -->
 
     <framework src="com.android.support:support-v4:27.+" />
     <framework src="com.android.support:support-media-compat:27.+" />
@@ -86,41 +85,45 @@
     <source-file src="src/android/java/PluginCallback.java" target-dir="src/com/rolamix/plugins/audioplayer/" />
     <source-file src="src/android/java/PlaylistItemOptions.java" target-dir="src/com/rolamix/plugins/audioplayer/" />
     <source-file src="src/android/java/RmxAudioPlayer.java" target-dir="src/com/rolamix/plugins/audioplayer/" />
-		<source-file src="src/android/java/RmxConstants.java" target-dir="src/com/rolamix/plugins/audioplayer/" />
+    <source-file src="src/android/java/RmxConstants.java" target-dir="src/com/rolamix/plugins/audioplayer/" />
     <source-file src="src/android/java/RmxAudioErrorType.java" target-dir="src/com/rolamix/plugins/audioplayer/" />
     <source-file src="src/android/java/RmxAudioStatusMessage.java" target-dir="src/com/rolamix/plugins/audioplayer/" />
     <source-file src="src/android/java/TrackRemovalItem.java" target-dir="src/com/rolamix/plugins/audioplayer/" />
-	</platform>
+  </platform>
 
-	<!-- ios -->
-	<platform name="ios">
-		<config-file target="config.xml" parent="/*">
-			<feature name="RmxAudioPlayer">
-				<param name="ios-package" value="RmxAudioPlayer" />
+  <!-- ios -->
+  <platform name="ios">
+    <config-file target="config.xml" parent="/*">
+      <feature name="RmxAudioPlayer">
+        <param name="ios-package" value="RmxAudioPlayer" />
         <param name="onload" value="true" />
-			</feature>
-		</config-file>
-
+      </feature>
+    </config-file>
+    <config-file target="*-Info.plist" parent="UIBackgroundModes">
+      <array>
+        <string>audio</string>
+      </array>
+    </config-file>
     <framework src="MediaPlayer.framework" />
     <framework src="AVFoundation.framework" />
 
-		<header-file src="src/ios/AudioTrack.h" />
+    <header-file src="src/ios/AudioTrack.h" />
     <header-file src="src/ios/AVBidirectionalQueuePlayer.h" />
     <header-file src="src/ios/Constants.h" />
-		<header-file src="src/ios/MainViewController+RmxAudioPlayer.h" />
-		<header-file src="src/ios/RmxAudioPlayer.h" />
+    <header-file src="src/ios/MainViewController+RmxAudioPlayer.h" />
+    <header-file src="src/ios/RmxAudioPlayer.h" />
 
-		<source-file src="src/ios/AudioTrack.m" />
+    <source-file src="src/ios/AudioTrack.m" />
     <source-file src="src/ios/AVBidirectionalQueuePlayer.m" />
-		<source-file src="src/ios/MainViewController+RmxAudioPlayer.m" />
-		<source-file src="src/ios/RmxAudioPlayer.m" />
-	</platform>
+    <source-file src="src/ios/MainViewController+RmxAudioPlayer.m" />
+    <source-file src="src/ios/RmxAudioPlayer.m" />
+  </platform>
 
-      <!-- browser -->
-    <platform name="browser">
-      <js-module src="www/browser/Media.js" name="RmxAudioPlayer">
-        <clobbers target="RmxAudioPlayer" />
-      </js-module>
-    </platform>
+  <!-- browser -->
+  <platform name="browser">
+    <js-module src="www/browser/Media.js" name="RmxAudioPlayer">
+      <clobbers target="RmxAudioPlayer" />
+    </js-module>
+  </platform>
 
 </plugin>

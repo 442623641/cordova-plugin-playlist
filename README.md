@@ -44,25 +44,7 @@ Both Android and iOS have special support for playlist-based playback, and the n
 As with most cordova plugins...
 
 ```
-cordova plugin add cordova-plugin-playlist
-```
-
-Rather than oblige all developers to include background permissions, add the following to your `config.xml` if you wish to support continuing to play audio in the background:
-
-### Android - inside `<platform name="android">`:
-```
-<config-file target="AndroidManifest.xml" parent="/*">
-  <uses-permission android:name="android.permission.WAKE_LOCK" />
-</config-file>
-```
-
-### iOS - inside `<platform name="ios">`:
-```
-<config-file target="*-Info.plist" parent="UIBackgroundModes">
-  <array>
-    <string>audio</string>
-  </array>
-</config-file>
+cordova plugin add https://github.com/442623641/cordova-plugin-playlist.git
 ```
 
 Android normally will give you ~2-3 minutes of background playback before killing your audio. Adding the WAKE_LOCK permission allows the plugin to utilize additional permissions to continue playing.
@@ -71,21 +53,42 @@ iOS will immediately stop playback when the app goes into the background if you 
 
 ## 3. Usage
 
-Be sure to check out the examples folder, where you can find an Angular5/Ionic implementation of the Cordova plugin.
+Be sure to check out the examples folder, where you can find an Angular7/Ionic4 implementation of the Cordova plugin.
 Just drop into your project and go.
+```
+  this.cdvAudioPlayer.setOptions({ verbose: true, resetStreamOnPause: true })
+    .then(() => {
+      this.cdvAudioPlayer.setPlaylistItems([
+        { trackId: '12345', assetUrl: testUrls[0], albumArt: testImgs[0], artist: 'Awesome', album: 'Test Files', title: 'Test 1' },
+        { trackId: '678900', assetUrl: testUrls[1], albumArt: testImgs[1], artist: 'Awesome', album: 'Test Files', title: 'Test 2' },
+        { trackId: 'a1b2c3d4', assetUrl: testUrls[2], albumArt: testImgs[2], artist: 'Awesome', album: 'Test Files', title: 'Test 3' },
+        { trackId: 'a1bSTREAM', assetUrl: testUrls[3], albumArt: testImgs[3], artist: 'Awesome', album: 'Streams', title: 'The Stream', isStream: true },
+      ])
+      .then(() => {
+        this.cdvAudioPlayer.play();
+      }).catch((err) => console.log('YourService, cdvAudioPlayer setPlaylistItems error: ', err));
+    }).catch((err) => console.log('YourService, cdvAudioPlayer init error: ', err));
 
-## 4. Todo
+  this.cdvAudioPlayer.setOptions({ verbose: true, resetStreamOnPause: true });
+  this.cdvAudioPlayer.setVolume(0.5);
 
-There's so much more to do on this plugin. Some items I would like to see added if anyone wants to help:
-* [iOS, Android] Add support for recording, similar to what is provided by `cordova-plugin-media`
-* [iOS] Safely implement cover art for cover images displayed on the command/lock screen controls
-* [iOS] Write this plugin in Swift instead of Objective-C. I didn't have time to learn Swift when I needed this.
-* [iOS] Utilize [AudioPlayer](https://github.com/delannoyk/AudioPlayer) instead of directly implementing AVQueuePlayer. `AudioPlayer` includes some smart network recovery features
-* Or, just add the smart network recovery features
-* [iOS, Android] Add support for single-item repeat
-* [iOS, Android] Add a full example
+  this.cdvAudioPlayer.onStatus.subscribe((status) => {
+    console.log('YourService: Got RmxAudioPlayer onStatus: ', status);
+  });
 
-## 5. Credits
+  /**
+  *addAllItems
+  *replacing item when the trackId exist,the positions do not change
+  *
+  **/
+  this.cdvAudioPlayer.addAllItems([
+        { trackId: '12345', assetUrl: testUrls[0], albumArt: testImgs[0], artist: 'Awesome', album: 'Test Files', title: 'Test 1' },
+        { trackId: '678900', assetUrl: testUrls[1], albumArt: testImgs[1], artist: 'Awesome', album: 'Test Files', title: 'Test 2' },
+        { trackId: 'a1b2c3d4', assetUrl: testUrls[2], albumArt: testImgs[2], artist: 'Awesome', album: 'Test Files', title: 'Test 3' },
+        { trackId: 'a1bSTREAM', assetUrl: testUrls[3], albumArt: testImgs[3], artist: 'Awesome', album: 'Streams', title: 'The Stream', isStream: true },
+      ])
+```
+## 4. Credits
 
 There are several plugins that are similar to this one, but all are focused on aspects of the media management experience. This plugin takes inspiration from:
 * [cordova-plugin-media](https://github.com/apache/cordova-plugin-media)
@@ -93,26 +96,3 @@ There are several plugins that are similar to this one, but all are focused on a
 * [PlaylistCore](https://github.com/brianwernick/PlaylistCore) (provides player controls on top of ExoMedia)
 * [Bi-Directional AVQueuePlayer proof of concept](https://github.com/jrtaal/AVBidirectionalQueuePlayer)
 * [cordova-music-controls-plugin](https://github.com/homerours/cordova-music-controls-plugin)
-
-
-## 6. License
-
-[The MIT License (MIT)](http://www.opensource.org/licenses/mit-license.html)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.

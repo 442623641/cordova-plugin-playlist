@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 // we can use R directly. Otherwise, we'd have to use the cordova activity,
 // but that would be a bit odd since this belongs to a service running
 // outside that activity. I'm not sure if that would work.
-// import __PACKAGE_NAME__.R;
+// import com.chaoyin.leo.R;
 import com.rolamix.plugins.audioplayer.FakeR;
 import com.rolamix.plugins.audioplayer.data.AudioTrack;
 
@@ -65,13 +65,13 @@ public class MediaImageProvider implements ImageProvider<AudioTrack> {
     @Override
     public int getNotificationIconRes() {
         // return R.mipmap.icon; // this comes from cordova itself.
-        return fakeR.getId("mipmap", "icon");
+        return fakeR.getId("mipmap", "ic_launcher");
     }
 
     @Override
     public int getRemoteViewIconRes() {
         // return R.mipmap.icon;
-        return fakeR.getId("mipmap", "icon");
+        return fakeR.getId("mipmap", "ic_launcher");
     }
 
     @Nullable
