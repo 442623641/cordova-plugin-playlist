@@ -1,4 +1,4 @@
-package __PACKAGE_NAME__;
+package com.chaoyin.leo;
 
 import android.app.Application;
 import android.support.annotation.NonNull;
@@ -14,8 +14,9 @@ import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import okhttp3.OkHttpClient;
-
 import com.rolamix.plugins.audioplayer.manager.PlaylistManager;
+
+import java.io.File;
 
 public class MainApplication extends Application {
     @Nullable
@@ -24,7 +25,6 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         playlistManager = new PlaylistManager(this);
         configureExoMedia();
     }
@@ -38,17 +38,22 @@ public class MainApplication extends Application {
         // Registers the media sources to use the OkHttp client instead of the standard Apache one
         // Note: the OkHttpDataSourceFactory can be found in the ExoPlayer extension library `extension-okhttp`
         ExoMedia.setDataSourceFactoryProvider(new ExoMedia.DataSourceFactoryProvider() {
+            @Nullable
+            private CacheDataSourceFactory instance;
+
             @NonNull
             @Override
-            public DataSource.Factory provide(@NonNull String userAgent, @Nullable TransferListener<? super DataSource> listener) {
-                // Updates the network data source to use the OKHttp implementation and allows it to follow redirects
-                OkHttpClient httpClient = new OkHttpClient().newBuilder().followRedirects(true).followSslRedirects(true).build();
-                DataSource.Factory upstreamFactory = new OkHttpDataSourceFactory(httpClient, userAgent, listener);
+            public DataSource.Factory provide(@NonNull String userAgent, @Nullable TransferListener listener) {
+                if (instance == null) {
+                    // Updates the network data source to use the OKHttp implementation
+                    DataSource.Factory upstreamFactory = new OkHttpDataSourceFactory(new OkHttpClient(), userAgent, listener);
 
-                // Adds a cache around the upstreamFactory.
-                // This sets a cache of 100MB, we might make this configurable.
-                Cache cache = new SimpleCache(getCacheDir(), new LeastRecentlyUsedCacheEvictor(100 * 1024 * 1024));
-                return new CacheDataSourceFactory(cache, upstreamFactory, CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR);
+                    // Adds a cache around the upstreamFactory
+                    Cache cache = new SimpleCache(new File(getCacheDir(), "ExoMediaCache"), new LeastRecentlyUsedCacheEvictor(100 * 1024 * 1024));
+                    instance = new CacheDataSourceFactory(cache, upstreamFactory, CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR);
+                }
+
+                return instance;
             }
         });
     }

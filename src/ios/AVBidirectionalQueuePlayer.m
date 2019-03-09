@@ -10,6 +10,7 @@
 //
 
 #import "AVBidirectionalQueuePlayer.h"
+#import "AudioTrack.h"
 
 @implementation AVBidirectionalQueuePlayer {
     NSMutableArray * _itemsForPlayer;
@@ -205,17 +206,31 @@
     // This method calls the superclass to add the new item to the AVQueuePlayer, then adds that item to the
     // proper location in the itemsForPlayer array and increments the nowPlayingIndex if necessary.
     [super insertItem:item afterItem:afterItem];
-
+    
     if ([_itemsForPlayer containsObject:afterItem]){ // AfterItem is non-nil
         if ([_itemsForPlayer indexOfObject:afterItem] < [_itemsForPlayer count] - 1){
             [_itemsForPlayer insertObject:item atIndex:[_itemsForPlayer indexOfObject:afterItem] + 1];
         } else {
             [_itemsForPlayer addObject:item];
         }
-    } else { // afterItem is nil
-        [_itemsForPlayer addObject:item];
+    } else {
+        NSUInteger idx = [_itemsForPlayer indexOfObjectPassingTest:^BOOL(AudioTrack * obj, NSUInteger idx, BOOL *stop) {
+            if ([obj.trackId isEqualToString: ((AudioTrack *)item).trackId ]) {
+                return YES;
+                *stop = YES; // 中止遍历，break
+            } else {
+                *stop = NO; // 继续遍历，continue
+            }
+            return NO;
+        }];
+        // [_itemsForPlayer containsObject:item]
+        if(idx>=0&&idx<1000&&_itemsForPlayer[idx]){
+            [_itemsForPlayer replaceObjectAtIndex:idx withObject:item];
+        }else{
+            [_itemsForPlayer addObject:item];
+        }
     }
-
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:AVBidirectionalQueueAddedItem object:self userInfo:@{@"item":item}];
 }
 

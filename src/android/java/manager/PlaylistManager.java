@@ -1,6 +1,7 @@
 package com.rolamix.plugins.audioplayer.manager;
 
 import java.lang.ref.WeakReference;
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 import android.app.Application;
@@ -235,8 +236,20 @@ public class PlaylistManager extends ListPlaylistManager<AudioTrack> implements 
 
     public void addItem(AudioTrack item) {
         if (item == null) { return; }
+        int index=this.getPositionForItem(item.getId());
+        if(index>-1){
+            AudioTracks.remove(index);
+        }
         AudioTracks.add(item);
         setItems(AudioTracks);
+    }
+
+    public void reverseItems() {
+        if(AudioTracks.size()<1) return;
+        AudioTrack currentItem = getCurrentItem(); // may be null
+        Collections.reverse(AudioTracks);
+        setItems(AudioTracks);
+        setCurrentPosition(AudioTracks.indexOf(currentItem));
     }
 
     public void addAllItems(List<AudioTrack> items) {

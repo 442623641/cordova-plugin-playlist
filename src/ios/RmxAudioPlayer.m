@@ -162,7 +162,10 @@ static char kPlayerItemTimeRangesContext;
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
-
+- (void) reverseItems:(CDVInvokedUrlCommand *) command {
+    CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_IO_EXCEPTION];
+    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
 - (void) removeItems:(CDVInvokedUrlCommand *) command {
     NSMutableArray* items = [command.arguments objectAtIndex:0];
     NSLog(@"RmxAudioPlayer.execute=removeItems, %@", items);

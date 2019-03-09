@@ -119,6 +119,13 @@ public class AudioPlayerPlugin extends CordovaPlugin implements RmxConstants, On
       return true;
     }
 
+    if (REVERSE_PLAYLIST_ITEMS.equals(action)) {
+      audioPlayerImpl.getPlaylistManager().reverseItems();
+      PluginResult result = new PluginResult(PluginResult.Status.OK, audioPlayerImpl.getPlaylistManager().getCurrentPosition());
+      new PluginCallback(callbackContext).send(result);
+      return true;
+    }
+
     if (REMOVE_PLAYLIST_ITEM.equals(action)) {
       int trackIndex = args.optInt(0, -1);
       String trackId = args.optString(1, "");

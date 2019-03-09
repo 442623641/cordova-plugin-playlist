@@ -12,6 +12,7 @@ public interface RmxConstants {
   String SET_PLAYLIST_ITEMS     = "setPlaylistItems";
   String ADD_PLAYLIST_ITEM      = "addItem";
   String ADD_PLAYLIST_ITEMS     = "addAllItems";
+  String REVERSE_PLAYLIST_ITEMS = "reverseItems";
   String REMOVE_PLAYLIST_ITEM   = "removeItem";
   String REMOVE_PLAYLIST_ITEMS  = "removeItems";
   String CLEAR_PLAYLIST_ITEMS   = "clearAllItems";

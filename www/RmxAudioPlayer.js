@@ -208,7 +208,9 @@ function () {
     _defineProperty(this, "addAllItems", function (successCallback, errorCallback, items) {
       exec(successCallback, errorCallback, 'RmxAudioPlayer', 'addAllItems', [_this.validateTracks(items)]);
     });
-
+    _defineProperty(this, "reverseItems", function (successCallback, errorCallback) {
+      exec(successCallback, errorCallback, 'RmxAudioPlayer', 'reverseItems', []);
+    });
     _defineProperty(this, "removeItem", function (successCallback, errorCallback, removeItem) {
       if (!removeItem) {
         return errorCallback(new Error('Track removal spec is empty'));
