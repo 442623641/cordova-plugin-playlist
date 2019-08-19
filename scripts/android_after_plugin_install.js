@@ -17,7 +17,7 @@ const filesToGenerate = [
 ];
 
 module.exports = function androidAfterPluginInstall(context) {
-  const deferral = context.requireCordovaModule('q').defer();
+  const deferral = require('q').defer();
 
   try {
     const projectName = getProjectName(context);
