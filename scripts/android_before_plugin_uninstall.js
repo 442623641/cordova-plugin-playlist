@@ -10,7 +10,7 @@ const {
 // the path as occupied and refuses to allow you to reinstall the plugin.
 
 module.exports = function androidAfterPluginRemove(context) {
-  const deferral = context.requireCordovaModule('q').defer();
+  const deferral = require('q').defer();
 
   try {
     const projectName = getProjectName(context);
